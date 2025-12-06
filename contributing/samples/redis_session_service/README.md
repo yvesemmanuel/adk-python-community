@@ -61,7 +61,7 @@ REDIS_URI=redis://localhost:6379
 
 ## Usage
 
-### Running the Sample
+### Option 1: Using `get_fast_api_app` with URI (Recommended - Easiest)
 
 The simplest way to use this sample is to run the included `main.py`:
 
@@ -70,11 +70,13 @@ python main.py
 ```
 
 The `main.py` file demonstrates how to:
-- Connect to Redis using the `RedisSessionService`
-- Create and manage sessions with a unique user ID and session ID
-- Use the Runner to execute agent queries while persisting session state
+- Register the Redis session service using `register_community_services()`
+- Use the `redis://` URI scheme with `get_fast_api_app`
+- Build the URI from environment variables
 
-### Using RedisSessionService in Your Code
+**Note:** You need to call `register_community_services()` from `google.adk_community.cli.service_registry` before using the `redis://` URI scheme.
+
+### Option 2: Using RedisSessionService Directly (Programmatic)
 
 ```python
 from google.adk_community.sessions import RedisSessionService
@@ -90,15 +92,11 @@ APP_NAME = "weather_assistant"
 USER_ID = "user_123"
 SESSION_ID = "session_01"
 
-try:
-    await session_service.create_session(
-        app_name=APP_NAME,
-        user_id=USER_ID,
-        session_id=SESSION_ID
-    )
-except AlreadyExistsError:
-    # Session already exists, which is fine
-    pass
+await session_service.create_session(
+    app_name=APP_NAME,
+    user_id=USER_ID,
+    session_id=SESSION_ID
+)
 
 # Use with runner
 runner = Runner(

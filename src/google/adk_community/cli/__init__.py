@@ -12,15 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import memory
-from . import sessions
-from . import version
-from . import cli
+"""CLI utilities for ADK community package."""
 
-__version__ = version.__version__
+from .service_registry import register_community_services
 
-try:
-    cli.service_registry.register_community_services()
-except Exception:
-    # Silently ignore if registration fails
-    pass
+__all__ = ["register_community_services"]

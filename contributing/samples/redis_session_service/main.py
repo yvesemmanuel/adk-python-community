@@ -38,13 +38,10 @@ async def main():
             "REDIS_URI environment variable not set. See README.md for setup."
         )
     session_service = RedisSessionService(uri=redis_uri)
-    try:
-        await session_service.create_session(
-            app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
-        )
-    except AlreadyExistsError:
-        # Session already exists, which is fine for this example.
-        pass
+
+    await session_service.create_session(
+        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
+    )
 
     runner = Runner(
         agent=root_agent, app_name=APP_NAME, session_service=session_service
